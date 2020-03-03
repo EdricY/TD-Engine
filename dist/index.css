@@ -3,10 +3,14 @@ body {
 }
 
 .outer {
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.controls-row {
+  display: flex;
+  flex-flow: row;
 }
 
 .square {

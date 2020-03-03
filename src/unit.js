@@ -1,18 +1,19 @@
 import { B } from "./constants"
 import { map, mapContains } from "./getMap"
 const TAU = 2 * Math.PI;
+const fieldFactor = .8;
 
-export default function Unit(x, y, r=8) {
+export default function Unit(x, y, r=8, field) {
   this.x = x;
   this.y = y;
   this.r = r;
   this.vx = 0;
   this.vy = 0;
   this.maxv = 1;
-  this.target = {x: this.x, y: this.y};
-  this.color = "blue";
+  this.color = "cyan";
+  if (Math.random() < .1) this.color = "magenta"
   this.selected = false;
-  // this.field = getField(Math.floor(this.y/B), Math.floor(this.x/B));
+  this.field = field;
 
   this.getLocation = function() {
     return {x: this.x, y: this.y};
@@ -45,8 +46,8 @@ export default function Unit(x, y, r=8) {
     let vec = {x:0, y:0};
     if (mapContains(i,j)){
       if (map[i][j] == 0) {
-        vec = this.field[i][j].v;
-      } else {
+        vec = this.field[i][j];
+      } else { //push away from wall
         vec = {
           x: this.x - (B*j + B/2),
           y: this.y - (B*i + B/2)
@@ -57,24 +58,6 @@ export default function Unit(x, y, r=8) {
   }
 
   this.update = function() {
-    if (withinGridSpace(this.getLocation(), this.target)) {
-      if (closeToPts(this.getLocation(), this.target)) {
-        this.vx = 0;
-        this.vy = 0;
-        return
-      }
-      let dx = this.target.x - this.x;
-      let dy = this.target.y - this.y;
-      let hyp = Math.sqrt(dx*dx + dy*dy);
-      dx /= hyp;
-      dy /= hyp;
-      this.vx = dx * this.maxv;
-      this.vy = dy * this.maxv;
-      this.x += this.vx;
-      this.y += this.vy;
-      return
-    }
-
     let fj = Math.floor((this.x - this.r)/ B);
     let fi = Math.floor((this.y - this.r)/ B);
     let cj = Math.ceil((this.x - this.r)/ B);
@@ -99,8 +82,8 @@ export default function Unit(x, y, r=8) {
     let hyp = Math.sqrt(dirx*dirx + diry*diry)
 
     if (!closeTo(hyp,0)){
-      this.vx = dirx / hyp;
-      this.vy = diry / hyp;
+      this.vx = (fieldFactor * dirx / hyp) + ((1-fieldFactor)*this.vx);
+      this.vy = (fieldFactor * diry / hyp) + ((1-fieldFactor)*this.vy);
     }
     this.vx *= this.maxv;
     this.vy *= this.maxv;

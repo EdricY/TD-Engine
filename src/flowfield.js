@@ -1,5 +1,6 @@
 import { map, MAP_H, MAP_W, mapContains, getHeight } from "./getMap";
 import MinPQ from "./minPQ";
+import { diagUnit } from "./constants";
 
 //map = map ? map : [[]];
 
@@ -26,6 +27,10 @@ function PFNode(i, j, fromNode) {
         x: fromNode.j - this.j,
         y: fromNode.i - this.i
       };
+      if (isDiagTo(this, fromNode)) {
+        this.v.x *= diagUnit;
+        this.v.y *= diagUnit;
+      }
     } else {
       this.v = {x: 0, y: 0};
     }
@@ -64,6 +69,13 @@ function PFNode(i, j, fromNode) {
   
     return list;
   }
+
+}
+
+function isDiagTo (a, b) {
+  if (a.i == b.i) return false;
+  if (a.j == b.j) return false;
+  return true; //could wrongly give true, but shouldn't at this point;
 }
 
 /*
@@ -105,7 +117,7 @@ function generateFlowField(i, j) {
   while (!mpq.isEmpty()) {
     let current = mpq.dequeue();
     if (field[current.i][current.j] != null) continue
-    field[current.i][current.j] = current;
+    field[current.i][current.j] = current.v;
     let ns = current.neighbors();
     for (let n of ns) {
       if (field[n.i][n.j] == null){
@@ -118,65 +130,6 @@ function generateFlowField(i, j) {
 }
 
 export function getField(i, j) {
-  //TODO use lookup table
+  //if possible, pre-generate instead or use lookup table instead
   return generateFlowField(i, j);
 }
-
-/*
-public void computePath() {
-  if(this.src == null || this.tar == null)
-      throw new IllegalArgumentException("must set start and end points first");
-
-  MinPQ<PFNode> pq = new MinPQ<>();
-  pq.insert(new PFNode(this.src, null));
-
-  PFNode solution = null;
-
-  pathFound = false;
-  pathCost = 0;
-  searchSize = 0;
-
-  while(!pq.isEmpty()) {
-      PFNode next = pq.delMin();
-      if(!next.isValid()) {
-          //StdOut.println("invalid, skipping!");
-          continue;
-      }
-      searchSize++;
-      next.use();
-      if(next.loc.equals(tar)) {
-          solution = next;
-          break;
-      }
-      for (PFNode n : next.neighbors()) {
-          int i = n.loc.getI();
-          int j = n.loc.getJ();
-          PFNode np = searched[i][j];
-          if(np == null) {
-              searched[i][j] = n;
-              pq.insert(n);
-          } else {
-              if(!np.isUsed() && n.compareTo(np) < 0) {
-                  //StdOut.println("not used, replacing " + np.getCost(heuristic) + " with " + n.getCost(heuristic) + ")!");
-                  np.invalidate();
-                  searched[i][j] = n;
-                  pq.insert(n);
-              }
-          }
-      }
-  }
-
-  if(solution == null) {
-      pathFound = false;
-  } else {
-      pathFound = true;
-      pathCost = solution.getCost(0);
-      pathSolution = new Stack<>();
-      while(solution != null) {
-          pathSolution.push(solution.loc);
-          solution = solution.fromNode;
-      }
-  }
-}
-
-*/
