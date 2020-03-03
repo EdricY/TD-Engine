@@ -1,4 +1,4 @@
-function MinPQ() {
+export default function MinPQ() {
   this.values = [];
   this.enqueue = function(val) {
     this.values.push(val);

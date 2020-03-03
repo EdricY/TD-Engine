@@ -1,19 +1,8 @@
-<head>
-  <title>RTS Engine Supreme Extravaganza</title>
-  <link rel="stylesheet" type="text/css" href="index.css">
-</head>
-<body>
-  <div class="outer">
-    <div class="square">
-      <canvas id="canvas" class="fill"></canvas>
-    </div>
-  </div>
-</body>
-<script src="minPQ.js"></script>
-<script src="getMap.js"></script>
-<script src="unit.js"></script>
-<script src="flowfield.js"></script>
-<script>
+import Unit from "./unit";
+import { getField } from "./flowfield.js";
+import { map } from "./getMap"
+import { W, B, S } from "./constants"
+
 var body = document.getElementById('body');
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d')
@@ -41,9 +30,7 @@ var selectionBox = {
   }
 };
 
-const W = 540
-const B = 18;
-const S = W/B; //30
+
 canvas.width = W;
 canvas.height = W;
 
@@ -230,4 +217,3 @@ window.onkeydown = function (e) {
 window.onkeyup = function (e) {
   keys[e.keyCode] = false;
 }
-</script>

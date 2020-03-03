@@ -1,4 +1,4 @@
-map = [
+export var map = [
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],
@@ -30,10 +30,10 @@ map = [
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 ]
-const MAP_H = map.length;
-const MAP_W = map[0].length;
+export const MAP_H = map.length;
+export const MAP_W = map[0].length;
 
-function mapContains(i, j) {
+export function mapContains(i, j) {
   if (i >= MAP_W) return false;
   if (i < 0) return false;
   if (j >= MAP_H) return false;
@@ -41,6 +41,6 @@ function mapContains(i, j) {
   return true;
 }
 
-function getHeight(i, j) { 
+export function getHeight(i, j) { 
   return map[i][j]; 
 }

@@ -1,5 +1,8 @@
+import { B } from "./constants"
+import { map, mapContains } from "./getMap"
 const TAU = 2 * Math.PI;
-function Unit(x, y, r=8) {
+
+export default function Unit(x, y, r=8) {
   this.x = x;
   this.y = y;
   this.r = r;
@@ -9,7 +12,7 @@ function Unit(x, y, r=8) {
   this.target = {x: this.x, y: this.y};
   this.color = "blue";
   this.selected = false;
-  this.field = getField(Math.floor(this.y/B), Math.floor(this.x/B));
+  // this.field = getField(Math.floor(this.y/B), Math.floor(this.x/B));
 
   this.getLocation = function() {
     return {x: this.x, y: this.y};

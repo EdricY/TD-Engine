@@ -1,0 +1,26 @@
+{
+  "name": "TD-Engine",
+  "version": "1.0.0",
+  "description": "A fun Tower Defense Engine sample written in Javascript.",
+  "main": "flowfield.js",
+  "scripts": {
+    "build": "webpack-dev-server",
+    "build:prod": "webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EdricY/TD-Engine.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EdricY/TD-Engine/issues"
+  },
+  "homepage": "https://github.com/EdricY/TD-Engine#readme",
+  "devDependencies": {
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}

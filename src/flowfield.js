@@ -1,4 +1,7 @@
-map = map ? map : [[]];
+import { map, MAP_H, MAP_W, mapContains, getHeight } from "./getMap";
+import MinPQ from "./minPQ";
+
+//map = map ? map : [[]];
 
 // fields = []
 // let startgenfield = Date.now();
@@ -96,7 +99,7 @@ function generateFlowField(i, j) {
       field[j].push(null);
     }
   }  
-  mpq = new MinPQ();
+  let mpq = new MinPQ();
   let root = new PFNode(i, j, null);
   mpq.enqueue(root);
   while (!mpq.isEmpty()) {
@@ -114,7 +117,7 @@ function generateFlowField(i, j) {
   return field;
 }
 
-function getField(i, j) {
+export function getField(i, j) {
   //TODO use lookup table
   return generateFlowField(i, j);
 }
