@@ -1,5 +1,5 @@
 import Unit from "./unit";
-import { getField } from "./flowfield.js";
+import { getField, pathExists } from "./flowfield.js";
 import { map, mapContains, MAP_H, MAP_W } from "./getMap"
 import { W, B, S } from "./constants"
 
@@ -24,7 +24,6 @@ window.player = player; //for debug
 
 var field;
 startBtn.addEventListener("click", function() {
-  field = getField(finishPos.i, finishPos.j);
   for (let i = 0; i < 8; i++) {
     let x = Math.floor((Math.random() + startPos.j) * B)
     let y = Math.floor((Math.random() + startPos.i) * B)
@@ -147,10 +146,13 @@ canvas.onmousedown = function(e) {
     //add wall
     if (mapContains(i,j)) {
       map[i][j] = 1;
+     triggerMapChanged()
+
     }
   } else if (e.button === 2){
     if (mapContains(i,j)) {
       map[i][j] = 0;
+     triggerMapChanged()
     }
   }
 }
@@ -164,15 +166,30 @@ canvas.onmousemove = function(e) {
     if (mapContains(i,j)) {
       map[i][j] = 1;
     }
+    triggerMapChanged()
   }
   else if (keys[2] == true) {
     if (mapContains(i,j)) {
       map[i][j] = 0;
     }
+    triggerMapChanged()
   }
 }
 
-canvas.onmouseup = function(e) {
+
+var mapTimeout = setTimeout(mapChanged, 0);
+function triggerMapChanged() {
+  clearTimeout(mapTimeout);
+  mapTimeout = setTimeout(mapChanged, 100);
+}
+
+const pathExistsSpan = document.getElementById("path-exists-span");
+function mapChanged() {
+  field = getField(finishPos.i, finishPos.j);
+  pathExistsSpan.innerText = pathExists(field, startPos.i, startPos.j)
+}
+
+window.onmouseup = function(e) {
   keys[e.button] = false;
 }
 

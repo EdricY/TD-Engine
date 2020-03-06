@@ -13,7 +13,6 @@ export default function Unit(x, y, r=8, field) {
   this.color = "cyan";
   if (Math.random() < .1) this.color = "magenta"
   this.selected = false;
-  this.field = field;
 
   this.getLocation = function() {
     return {x: this.x, y: this.y};
@@ -45,8 +44,8 @@ export default function Unit(x, y, r=8, field) {
   this.getFieldVector = function(i, j) {
     let vec = {x:0, y:0};
     if (mapContains(i,j)){
-      if (map[i][j] == 0) {
-        vec = this.field[i][j];
+      if (map[i][j] == 0 && field[i][j] != null) {
+        vec = field[i][j];
       } else { //push away from wall
         vec = {
           x: this.x - (B*j + B/2),

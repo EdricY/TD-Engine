@@ -14,6 +14,7 @@ import { diagUnit } from "./constants";
 // }
 // console.log('took:', Date.now()-startgenfield)
 
+//TODO: class instead of function
 function PFNode(i, j, fromNode) {
   this.i = i;
   this.j = j;
@@ -21,8 +22,7 @@ function PFNode(i, j, fromNode) {
   this.fromNode = fromNode;
   this.v = {x:0, y:0};
   
-  if (fromNode) {
-    if (map[i][j] == 0) {
+  if (fromNode && map[i][j] == 0) {
       this.v = {
         x: fromNode.j - this.j,
         y: fromNode.i - this.i
@@ -30,10 +30,7 @@ function PFNode(i, j, fromNode) {
       if (isDiagTo(this, fromNode)) {
         this.v.x *= diagUnit;
         this.v.y *= diagUnit;
-      }
-    } else {
-      this.v = {x: 0, y: 0};
-    }
+    } // else keep v from above
     this.cost = computeTravelCost(fromNode.i, fromNode.j, this.i, this.j);
     this.cost += fromNode.cost;
   }
@@ -49,7 +46,7 @@ function PFNode(i, j, fromNode) {
   this.addNeighbor = function(addI, addJ, list) {
     let ni = this.i + addI;
     let nj = this.j + addJ;
-    if(!mapContains(ni, nj)) return;
+    if(!mapContains(ni, nj)) return; //out of bounds
     list.push(new PFNode(ni ,nj, this));
   }
   
@@ -103,6 +100,7 @@ function computeTravelCost(i0, j0, i1, j1) {
   return dist;
 }
 
+//i and j of target
 function generateFlowField(i, j) {
   let field = [];
   for (let j = 0; j < map.length; j++) {
@@ -116,20 +114,31 @@ function generateFlowField(i, j) {
   mpq.enqueue(root);
   while (!mpq.isEmpty()) {
     let current = mpq.dequeue();
-    if (field[current.i][current.j] != null) continue
+    if (map[current.i][current.j] !== 0) continue; //exclude blocked paths in field
+    if (field[current.i][current.j] != null) continue //traversal already reached this map position
     field[current.i][current.j] = current.v;
+    //add neigbors
     let ns = current.neighbors();
     for (let n of ns) {
       if (field[n.i][n.j] == null){
         mpq.enqueue(n);
-      } 
+      }
     }
   }
 
   return field;
 }
 
+//i and j of target
 export function getField(i, j) {
   //if possible, pre-generate instead or use lookup table instead
   return generateFlowField(i, j);
+}
+
+//TODO: maybe make flowfield class?
+
+//check if you can reach target from given i and j 
+export function pathExists(field, i, j) {
+  if (map[i][j] !== 0) return false;
+  return field[i][j] != null;
 }
